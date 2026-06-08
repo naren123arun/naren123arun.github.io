@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — The Lens</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream:   #f5f0e8;
+      --ivory:   #faf7f2;
+      --stone:   #c8bfb0;
+      --ash:     #8a8178;
+      --charcoal:#2e2b27;
+      --ink:     #1a1714;
+      --gold:    #b89c6e;
+      --gold-lt: #d4b98a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ivory);
+      color: var(--charcoal);
+      font-family: 'Tenor Sans', sans-serif;
+      font-size: 15px;
+      letter-spacing: 0.03em;
+      overflow-x: hidden;
+    }
+
+    /* ── CURSOR ── */
+    body { cursor: crosshair; }
+    a, button { cursor: crosshair; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.6rem 4rem;
+      background: rgba(250,247,242,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,191,176,0.35);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      color: var(--ink);
+      text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--gold); font-style: italic; }
+    nav ul { list-style: none; display: flex; gap: 2.8rem; }
+    nav ul li a {
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ash);
+      transition: color 0.3s;
+      position: relative;
+    }
+    nav ul li a::after {
+      content: '';
+      position: absolute; left: 0; bottom: -3px;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.35s ease;
+    }
+    nav ul li a:hover { color: var(--ink); }
+    nav ul li a:hover::after { width: 100%; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+    .hero-text {
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 6rem 4rem 6rem 5rem;
+    }
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.6rem;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 5.5vw, 5.6rem);
+      font-weight: 300;
+      line-height: 1.08;
+      color: var(--ink);
+      margin-bottom: 1.8rem;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-sub {
+      font-size: 0.88rem;
+      line-height: 1.9;
+      color: var(--ash);
+      max-width: 380px;
+      margin-bottom: 3rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2.6rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.7rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      transition: background 0.35s, color 0.35s;
+      align-self: flex-start;
+    }
+    .btn:hover {
+      background: var(--gold);
+      color: var(--ivory);
+    }
+    .hero-image-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-image-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.85) brightness(0.97);
+      transition: transform 8s ease;
+    }
+    .hero-image-wrap:hover img { transform: scale(1.04); }
+    .hero-caption {
+      position: absolute;
+      bottom: 2rem; left: 2rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex; align-items: center; gap: 1.5rem;
+      padding: 0 5rem;
+      margin: 3rem 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--stone); opacity: 0.5; }
+    .divider-ornament {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      text-align: center;
+      padding: 5rem 2rem 3rem;
+    }
+    .section-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 4vw, 3.8rem);
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+    .section-title em { font-style: italic; color: var(--ash); }
+
+    /* ── GALLERY ── */
+    #work { background: var(--cream); padding-bottom: 6rem; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 260px;
+      gap: 6px;
+      padding: 2rem 4rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      background: var(--stone);
+    }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s ease, filter 0.5s ease;
+      filter: saturate(0.8);
+    }
+    .gallery-item:hover img {
+      transform: scale(1.06);
+      filter: saturate(1);
+    }
+    .gallery-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,23,20,0.65) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex; align-items: flex-end;
+      padding: 1.4rem 1.6rem;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* Grid layout spans */
+    .g1  { grid-column: span 5; grid-row: span 2; }
+    .g2  { grid-column: span 7; }
+    .g3  { grid-column: span 4; }
+    .g4  { grid-column: span 3; }
+    .g5  { grid-column: span 4; grid-row: span 2; }
+    .g6  { grid-column: span 8; }
+    .g7  { grid-column: span 4; }
+    .g8  { grid-column: span 4; }
+    .g9  { grid-column: span 5; }
+    .g10 { grid-column: span 3; }
+
+    /* ── ABOUT ── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 60vh;
+      background: var(--ivory);
+    }
+    .about-image {
+      position: relative;
+      overflow: hidden;
+    }
+    .about-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: saturate(0.75) sepia(0.12);
+      display: block;
+    }
+    .about-text {
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 6rem 5rem;
+    }
+    .about-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.55;
+      color: var(--charcoal);
+      border-left: 2px solid var(--gold);
+      padding-left: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .about-body {
+      font-size: 0.88rem;
+      line-height: 1.95;
+      color: var(--ash);
+      max-width: 420px;
+      margin-bottom: 3rem;
+    }
+    .about-stats {
+      display: flex; gap: 3.5rem;
+      margin-bottom: 3rem;
+    }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ash);
+      margin-top: 0.3rem;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--charcoal);
+      padding: 7rem 4rem;
+    }
+    #services .section-eyebrow { color: var(--gold-lt); }
+    #services .section-title { color: var(--cream); }
+    #services .section-title em { color: var(--stone); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 4rem;
+    }
+    .service-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(200,191,176,0.12);
+      padding: 3rem 2.5rem;
+      position: relative;
+      transition: background 0.35s;
+    }
+    .service-card:hover { background: rgba(184,156,110,0.08); }
+    .service-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: rgba(184,156,110,0.2);
+      line-height: 1;
+      margin-bottom: 1.2rem;
+    }
+    .service-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .service-desc {
+      font-size: 0.82rem;
+      line-height: 1.9;
+      color: var(--stone);
+    }
+    .service-line {
+      width: 2rem; height: 1px;
+      background: var(--gold);
+      margin-top: 2rem;
+      transition: width 0.4s ease;
+    }
+    .service-card:hover .service-line { width: 4rem; }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--cream);
+      padding: 7rem 4rem;
+      text-align: center;
+    }
+    .contact-inner { max-width: 580px; margin: 0 auto; }
+    .contact-body {
+      font-size: 0.88rem;
+      line-height: 1.9;
+      color: var(--ash);
+      margin: 2rem auto 3.5rem;
+    }
+    .contact-email {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 300;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 2px;
+      transition: color 0.3s, border-color 0.3s;
+      display: inline-block;
+      margin-bottom: 3.5rem;
+    }
+    .contact-email:hover { color: var(--gold); }
+    .social-links {
+      display: flex; justify-content: center; gap: 2.5rem;
+    }
+    .social-links a {
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--ash);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .social-links a:hover { color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      padding: 2.5rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      color: var(--stone);
+    }
+    .footer-logo span { color: var(--gold); font-style: italic; }
+    .footer-copy {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(200,191,176,0.4);
+    }
+
+    /* ── FADE-IN ANIMATION ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.4rem 2rem; }
+      nav ul { gap: 1.6rem; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-image-wrap { height: 55vw; }
+      .hero-text { padding: 4rem 2rem; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 220px; padding: 1rem 1.5rem; }
+      .g1,.g2,.g3,.g4,.g5,.g6,.g7,.g8,.g9,.g10 { grid-column: span 1; grid-row: span 1; }
+      .g1, .g5 { grid-row: span 2; }
+      #about { grid-template-columns: 1fr; }
+      .about-image { height: 55vw; }
+      .about-text { padding: 4rem 2rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">The <span>Lens</span></div>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text fade-up">
+      <p class="hero-eyebrow">Visual Storyteller &amp; Fine Art Photographer</p>
+      <h1 class="hero-title">Light,<br/>Shadow,<br/>&amp; <em>Moment.</em></h1>
+      <p class="hero-sub">
+        Every frame is a conversation between what exists and what is felt.
+        I craft images that linger — in editorial, portrait, and landscape photography.
+      </p>
+      <a href="#work" class="btn">View Portfolio</a>
+    </div>
+    <div class="hero-image-wrap">
+      <!-- Replace "image1.jpg" with your actual filename after uploading to GitHub -->
+      <img src="image1.jpg" alt="Hero photograph" />
+      <span class="hero-caption">Featured Work</span>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-ornament">✦</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- GALLERY -->
+  <section id="work">
+    <div class="section-header fade-up">
+      <p class="section-eyebrow">Selected Works</p>
+      <h2 class="section-title">The <em>Portfolio</em></h2>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item g1 fade-up">
+        <img src="image2.jpg" alt="Portfolio image 2"/>
+        <div class="gallery-overlay"><span class="gallery-label">Portrait</span></div>
+      </div>
+      <div class="gallery-item g2 fade-up">
+        <img src="image3.jpg" alt="Portfolio image 3"/>
+        <div class="gallery-overlay"><span class="gallery-label">Landscape</span></div>
+      </div>
+      <div class="gallery-item g3 fade-up">
+        <img src="image4.jpg" alt="Portfolio image 4"/>
+        <div class="gallery-overlay"><span class="gallery-label">Editorial</span></div>
+      </div>
+      <div class="gallery-item g4 fade-up">
+        <img src="image5.jpg" alt="Portfolio image 5"/>
+        <div class="gallery-overlay"><span class="gallery-label">Architecture</span></div>
+      </div>
+      <div class="gallery-item g5 fade-up">
+        <img src="image6.jpg" alt="Portfolio image 6"/>
+        <div class="gallery-overlay"><span class="gallery-label">Nature</span></div>
+      </div>
+      <div class="gallery-item g6 fade-up">
+        <img src="image7.jpg" alt="Portfolio image 7"/>
+        <div class="gallery-overlay"><span class="gallery-label">Street</span></div>
+      </div>
+      <div class="gallery-item g7 fade-up">
+        <img src="image8.jpg" alt="Portfolio image 8"/>
+        <div class="gallery-overlay"><span class="gallery-label">Abstract</span></div>
+      </div>
+      <div class="gallery-item g8 fade-up">
+        <img src="image9.jpg" alt="Portfolio image 9"/>
+        <div class="gallery-overlay"><span class="gallery-label">Portrait</span></div>
+      </div>
+      <div class="gallery-item g9 fade-up">
+        <img src="image10.jpg" alt="Portfolio image 10"/>
+        <div class="gallery-overlay"><span class="gallery-label">Travel</span></div>
+      </div>
+      <div class="gallery-item g10 fade-up">
+        <img src="image11.jpg" alt="Portfolio image 11"/>
+        <div class="gallery-overlay"><span class="gallery-label">Fine Art</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-ornament">✦</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-image">
+      <!-- Replace "image12.jpg" with your portrait/about photo -->
+      <img src="image12.jpg" alt="Photographer portrait"/>
+    </div>
+    <div class="about-text fade-up">
+      <blockquote class="about-quote">
+        "I don't take photographs — I wait for the world to reveal itself."
+      </blockquote>
+      <p class="about-body">
+        Based in Maharashtra, India, I have spent over a decade pursuing the interplay of light
+        and emotion through the lens. My work spans fine art portraiture, documentary landscapes,
+        and editorial assignments across India and beyond.
+        <br/><br/>
+        Each project begins with silence — an attentiveness to what the scene wants to say —
+        before the shutter ever speaks.
+      </p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-num">10+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div>
+          <div class="stat-num">300+</div>
+          <div class="stat-label">Projects Completed</div>
+        </div>
+        <div>
+          <div class="stat-num">12</div>
+          <div class="stat-label">Awards &amp; Honours</div>
+        </div>
+      </div>
+      <a href="#contact" class="btn">Work Together</a>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-header fade-up" style="padding-bottom:0;">
+      <p class="section-eyebrow">What I Offer</p>
+      <h2 class="section-title" style="color:var(--cream)">My <em style="color:var(--stone)">Services</em></h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-up">
+        <div class="service-num">01</div>
+        <h3 class="service-title">Portrait Photography</h3>
+        <p class="service-desc">Intimate, emotive portraiture for individuals, families, and professionals. Studio or on-location sessions crafted to your vision.</p>
+        <div class="service-line"></div>
+      </div>
+      <div class="service-card fade-up">
+        <div class="service-num">02</div>
+        <h3 class="service-title">Editorial &amp; Commercial</h3>
+        <p class="service-desc">High-impact imagery for magazines, brands, and campaigns. Concept development through final delivery, fully art-directed.</p>
+        <div class="service-line"></div>
+      </div>
+      <div class="service-card fade-up">
+        <div class="service-num">03</div>
+        <h3 class="service-title">Landscape &amp; Travel</h3>
+        <p class="service-desc">Fine art landscape prints and travel documentation that capture the soul of a place, available as limited-edition archival prints.</p>
+        <div class="service-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner fade-up">
+      <p class="section-eyebrow">Get In Touch</p>
+      <h2 class="section-title">Let's Create<br/><em>Together</em></h2>
+      <p class="contact-body">
+        Available for commissions, collaborations, and print enquiries.
+        Response within 24 hours.
+      </p>
+      <!-- Replace with your actual email -->
+      <a class="contact-email" href="mailto:hello@youremail.com">hello@youremail.com</a>
+      <div class="social-links">
+        <a href="#" target="_blank">Instagram</a>
+        <a href="#" target="_blank">Behance</a>
+        <a href="#" target="_blank">LinkedIn</a>
+        <a href="#" target="_blank">500px</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">The <span>Lens</span></div>
+    <div class="footer-copy">&copy; 2026 — All Rights Reserved</div>
+  </footer>
+
+  <!-- JS: Intersection Observer fade-in -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach((el, i) => {
+      el.style.transitionDelay = `${(i % 4) * 0.12}s`;
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
